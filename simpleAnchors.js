@@ -24,13 +24,16 @@
             offset: 0,
 
             autoBuild: false,
-            // upKey           = 38,            // key code to navigate to the next section
-            // downKey         = 40,            // key code to navigate to the previous section
             sections: 'h2',
-            // subSections: false,
             sectionEl: 'section',
             wrapper: 'article[role="article"]',
-            // showHeadline: true,
+            
+            // Next Version..
+
+            // upKey           = 38,            // key code to navigate to the next section
+            // downKey         = 40,            // key code to navigate to the previous section
+            // subSections: false,
+            // showHeading: true,
             // showTopLink: true,
             // topLinkText: 'Top',
             // insertLocation: 'insertBefore'
