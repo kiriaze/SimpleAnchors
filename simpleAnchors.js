@@ -24,16 +24,13 @@
             offset: 0,
 
             autoBuild: false,
-            sections: 'h2',
-            sectionEl: 'section',
-            wrapper: 'article[role="article"]',
-            
-            // Next Version..
-
             // upKey           = 38,            // key code to navigate to the next section
             // downKey         = 40,            // key code to navigate to the previous section
+            sections: 'h2',
             // subSections: false,
-            // showHeading: true,
+            sectionEl: 'section',
+            wrapper: 'article[role="article"]',
+            // showHeadline: true,
             // showTopLink: true,
             // topLinkText: 'Top',
             // insertLocation: 'insertBefore'
@@ -48,7 +45,7 @@
 
         this._defaults  = defaults;
         this._name      = pluginName;
-        
+
         this.link       = element.selector ? element.selector : '[data-scroll-to]';
         this.$link      = $(this.link);
 
@@ -109,17 +106,17 @@
                 $link       = this.$link,
                 offset      = this.options.offset;
 
-            // on scroll, check to see if the element has reached the top, 
+            // on scroll, check to see if the element has reached the top,
             // and if so add class to nav element
             $('[data-scroll-target]').each( function() {
 
                 var $this = $(this);
-                var distance = $this.offset().top - offset;
-                var target = $this.attr('data-scroll-target');
-                // console.log(target, distance);
 
-                $window.scroll(function() {
-                    if ( $(this).scrollTop() >= distance ) {
+                $(window).scroll(function() {
+                    var elemTop = $this.offset().top - offset - 1; // -1 hack..
+                    var target = $this.attr('data-scroll-target');
+                    var windowTop = $(window).scrollTop();
+                    if ( windowTop >= elemTop ) {
                         $link.removeClass(activeClass);
                         if ( target != 'top' ) // exclude back to top anchor
                             $('[data-scroll-to='+target+']').addClass(activeClass);
@@ -133,7 +130,7 @@
         autoBuild: function(el, options) {
 
             if( this.options.autoBuild ) {
-                
+
                 var sections = this.options.sections, // <h2>
                     container = this.options.sectionEl, // <section>
                     wrapper = this.options.wrapper, // article[role="article"]
@@ -161,7 +158,7 @@
         }
 
     };
-    
+
     // Made into selectorless call
     $[pluginName] = function(options) {
         var $window = $(window);
