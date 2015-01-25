@@ -1,8 +1,6 @@
-@if $fadeOut == true {
-	@keyframes fadeOut {
-		0% {opacity: 1;}
-		100% {opacity: 0;}
-	}
+@keyframes fadeOut {
+	0% {opacity: 1;}
+	100% {opacity: 0;}
 }
 
 @mixin fadeOut($duration, $delay, $function, $fill, $visibility) {

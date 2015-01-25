@@ -1,13 +1,11 @@
-@if $slideOutUp == true {
-	@keyframes slideOutUp {
-		0% {
-			transform: translateY(0);
-		}
+@keyframes slideOutUp {
+	0% {
+		transform: translateY(0);
+	}
 
-		100% {
-			opacity: 0;
-			transform: translateY(-20%);
-		}
+	100% {
+		opacity: 0;
+		transform: translateY(-20%);
 	}
 }
 

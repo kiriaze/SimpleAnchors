@@ -1,19 +1,17 @@
-@if $fadeOutUpBig == true {
-	@keyframes fadeOutUpBig {
-		0% {
-			opacity: 1;
-			transform: translateY(0);
-		}
-
-		100% {
-			opacity: 0;
-			transform: translateY(-2000px);
-		}
-	}
+@keyframes fadeOutUpBig {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  100% {
+    opacity: 0;
+    transform: translateY(-2000px);
+  }
 }
 
 @mixin fadeOutUpBig($duration, $delay, $function, $fill, $visibility) {
-	animation-name: fadeOutUpBig;
+  animation-name: fadeOutUpBig;
 	@include duration($duration);
 	@include delay($delay);
 	@include function($function);

@@ -1,13 +1,11 @@
-@if $fadeOutScale == true {
-	@keyframes fadeOutScale {
-		0% {
-			transform: scale(1);
-			opacity: 1;
-		}
-		100% {
-			transform: scale(.7);
-			opacity: 0;
-		}
+@keyframes fadeOutScale {
+	0% {
+		transform: scale(1);
+		opacity: 1;
+	}	
+	100% {
+		transform: scale(.7);
+		opacity: 0;
 	}
 }
 

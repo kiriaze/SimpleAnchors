@@ -1,14 +1,12 @@
-@if $fadeOutLeft == true {
-	@keyframes fadeOutLeft {
-		0% {
-			opacity: 1;
-			transform: translateX(0);
-		}
-
-		100% {
-			opacity: 0;
-			transform: translateX(-20%);
-		}
+@keyframes fadeOutLeft {
+	0% {
+		opacity: 1;
+		transform: translateX(0);
+	}
+	
+	100% {
+		opacity: 0;
+		transform: translateX(-20%);
 	}
 }
 
