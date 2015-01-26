@@ -25,9 +25,6 @@
 	padding-bottom: 0;
 }
 
-
-
-
 .icon-list {
 	i {
 		padding: 1rem;
@@ -39,6 +36,7 @@
 // hack for gutters in grid/row of full width sections
 section {
 	overflow: hidden;
+	position: relative;
 }
 
 .container {
@@ -46,17 +44,45 @@ section {
 }
 
 #header {
-	padding: 2rem 0;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 1;
+	background: white;
+	&.sticky-nav {
+		position: fixed;
+		bottom: initial;
+		top: 0;
+	}
 	.logo {
 		float: left;
 	}
 	#nav {
-		float: right;
-		li {
-			display: inline-block;
-			margin: 0 0 0 1rem;
-			a {
-
+		ul {
+			text-align: justify;
+			font-size: 0px;
+			margin: 0;
+			&:after {
+				content: '';
+				display: inline-block;
+				width: 100%;
+			}
+			li {
+				display: inline-block;
+				text-align: center;
+				margin: 0;
+				padding: 0;
+				width: 20%;
+				font-size: initial;
+				background: yellow;
+				.active {
+					background: red;
+				}
+				a {
+					display: block;
+					padding: 1rem 0;
+				}
 			}
 		}
 	}

@@ -6,163 +6,196 @@
  */
 ;(function ( $, window, document, undefined ) {
 
-    // Data Attr scroll to with offset - just under 2k minified
-    // Example Usage
-    // <a href="#" data-scroll-to="example-container" data-scroll-offset="100">Go to Section</a>
-    // <div data-scroll-target="example-container"></div>
+	// Data Attr scroll to with offset - just under 2k minified
+	// Example Usage
+	// <a href="#" data-scroll-to="example-container" data-scroll-offset="100">Go to Section</a>
+	// <div data-scroll-target="example-container"></div>
 
-    // Can be called with default selector $.simpleAnchors();
-    // or set to one $('[data-scroll-to]').simpleAnchors();
+	// Can be called with default selector $.simpleAnchors();
+	// or set to one $('[data-scroll-to]').simpleAnchors();
 
 
-    // Create the defaults once
-    var pluginName = "simpleAnchors",
-        defaults = {
-            duration: 800, // vary the speed depending the distance in future update
-            easing: 'swing', // the easing function for animation // expo, cubic, circ, swing
-            activeClass: 'active', // class given to the active nav element
-            offset: 0,
+	// Create the defaults once
+	var pluginName = "simpleAnchors",
+		defaults = {
+			duration: 800, // vary the speed depending the distance in future update
+			easing: 'swing', // the easing function for animation // expo, cubic, circ, swing
+			activeClass: 'active', // class given to the active nav element
+			offset: 0,
 
-            autoBuild: false,
-            // upKey           = 38,            // key code to navigate to the next section
-            // downKey         = 40,            // key code to navigate to the previous section
-            sections: 'h2',
-            // subSections: false,
-            sectionEl: 'section',
-            wrapper: 'article[role="article"]',
-            // showHeadline: true,
-            // showTopLink: true,
-            // topLinkText: 'Top',
-            // insertLocation: 'insertBefore'
-        };
+			autoBuild: false,
+			// upKey           = 38,            // key code to navigate to the next section
+			// downKey         = 40,            // key code to navigate to the previous section
+			sections: 'h2',						// the elements auto build targets to generate links from
+			// subSections: false,
+			sectionEl: 'section',				// the elements auto build searchs for the section arg
+			wrapper: '.test',					// wrapper of all the auto build sections
+			navEl: '#nav',						// to place auto build links in
 
-    // The actual plugin constructor
-    function Plugin( element, options ) {
+			// showHeadline: true,
+			// showTopLink: true,
+			// topLinkText: 'Top',
+			// insertLocation: 'insertBefore'
+		};
 
-        this.element    = element;
-        this.$elem      = $(this.element);
-        this.options    = $.extend( {}, defaults, options );
+	// The actual plugin constructor
+	function Plugin( element, options ) {
 
-        this._defaults  = defaults;
-        this._name      = pluginName;
+		this.element    = element;
+		this.$elem      = $(this.element);
+		this.options    = $.extend( {}, defaults, options );
 
-        this.link       = element.selector ? element.selector : '[data-scroll-to]';
-        this.$link      = $(this.link);
+		this._defaults  = defaults;
+		this._name      = pluginName;
 
-        this.init();
-        this.scrollSpy();
-        this.autoBuild();
+		this.link       = element.selector ? element.selector : '[data-scroll-to]';
+		this.$link      = $(this.link);
 
-    }
+		this.init();
 
-    Plugin.prototype = {
+	}
 
-        init: function() {
+	$.extend(Plugin.prototype, {
 
-            // console.log(this.element.selector);
-            // console.log(this.options);
+		init: function () {
+			// Place initialization logic here
+			// You already have access to the DOM element and
+			// the options via the instance, e.g. this.element
+			// and this.settings
+			// you can add more functions like the one below and
+			// call them like so: this.yourOtherFunction(this.element, this.settings).
 
-            var activeClass = this.options.activeClass,
-                offset      = this.options.offset;
+			// console.log(this.element.selector);
+			// console.log(this.options);
 
-            // set data attr to body tag of parent theme
-            $('body').attr('data-scroll-target','top');
+			var activeClass = this.options.activeClass,
+				offset      = this.options.offset;
 
-            $('body').on('click', this.link, { myOptions: this.options }, function(e) {
+			// set data attr to body tag of parent theme
+			$('body').attr('data-scroll-target','top');
 
-                e.preventDefault();                                                     // prevent hash click. Disabled for linking from other pages
+			$('body').on('click', this.link, { myOptions: this.options }, function(e) {
 
-                var $self           = $(this),                                          // cache this
-                    scrollTo        = $self.data('scroll-to'),                          // set destination to data attr
-                    scrollTarget    = $('[data-scroll-target=' + scrollTo + ']'),       // set scrollTarget to scroll-target
-                    scrollOffset    = ($self.data('scroll-offset')) ? $self.data('scroll-offset') : offset;  // set offset to data attr
+				e.preventDefault();                                                     // prevent hash click. Disabled for linking from other pages
 
-                // console.log($self,scrollTarget,scrollOffset);
+				var $self           = $(this),                                          // cache this
+					scrollTo        = $self.data('scroll-to'),                          // set destination to data attr
+					scrollTarget    = $('[data-scroll-target=' + scrollTo + ']'),       // set scrollTarget to scroll-target
+					scrollOffset    = ($self.data('scroll-offset')) ? $self.data('scroll-offset') : offset;  // set offset to data attr
 
-                var $options    = e.data.myOptions;
-                var duration    = $options.duration;
-                var easing      = $options.easing;
+				// console.log($self,scrollTarget,scrollOffset);
 
-                // if scrollTarget is valid, scroll to
-                if( scrollTarget && scrollTarget.offset() ){
-                    if(/(iPhone|iPod)\sOS\s6/.test(navigator.userAgent)){
-                        $('html, body').animate({
-                            scrollTop: scrollTarget.offset().top
-                        }, duration, easing);
-                    } else {
-                        $('html, body').animate({
-                            scrollTop: scrollTarget.offset().top - scrollOffset
-                        }, duration, easing);
-                    }
-                }
+				var $options    = e.data.myOptions;
+				var duration    = $options.duration;
+				var easing      = $options.easing;
 
-            });
+				// if scrollTarget is valid, scroll to
+				if ( scrollTarget && scrollTarget.offset() ) {
+					if(/(iPhone|iPod)\sOS\s6/.test(navigator.userAgent)){
+						$('html, body').animate({
+							scrollTop: scrollTarget.offset().top
+						}, duration, easing);
+					} else {
+						$('html, body').animate({
+							scrollTop: scrollTarget.offset().top - scrollOffset
+						}, duration, easing);
+					}
+				}
+			});
 
-        },
+			this.autoBuild();
+			this.scrollSpy();
 
-        scrollSpy: function(el, options) {
+		},
 
-            var activeClass = this.options.activeClass,
-                $link       = this.$link,
-                offset      = this.options.offset;
+		scrollSpy: function(el, options) {
 
-            // on scroll, check to see if the element has reached the top,
-            // and if so add class to nav element
-            $('[data-scroll-target]').each( function() {
+			var activeClass = this.options.activeClass,
+				$link       = this.$link,
+				offset      = this.options.offset + 1;
 
-                var $this = $(this);
+			// on scroll, check to see if the element has reached the top,
+			// and if so add class to nav element
+			$(window).scroll(function() {
 
-                $(window).scroll(function() {
-                    var elemTop = $this.offset().top - offset - 1; // -1 hack..
-                    var target = $this.attr('data-scroll-target');
-                    var windowTop = $(window).scrollTop();
-                    if ( windowTop >= elemTop ) {
-                        $link.removeClass(activeClass);
-                        if ( target != 'top' ) // exclude back to top anchor
-                            $('[data-scroll-to='+target+']').addClass(activeClass);
-                    }
-                });
+				var scrollPos = $(window).scrollTop();
+				$('[data-scroll-to]').each(function() {
 
-            })
+					var currLink = $(this),
+						target     = currLink.data('scroll-to'),
+						refElement = $('[data-scroll-target='+ target +']');
 
-        },
+					if ( !refElement.length ) {
+						return;
+					}
 
-        autoBuild: function(el, options) {
+					if (
+						( refElement.position().top - offset <= scrollPos ) &&
+						( refElement.position().top - offset + refElement.outerHeight() > scrollPos )
+					) {
 
-            if( this.options.autoBuild ) {
+						$('[data-scroll-to]').removeClass(activeClass);
 
-                var sections = this.options.sections, // <h2>
-                    container = this.options.sectionEl, // <section>
-                    wrapper = this.options.wrapper, // article[role="article"]
-                    navList = $('<ul />').prependTo(wrapper);
+						if ( target != 'top' ) // exclude back to top anchor
+							currLink.addClass(activeClass);
 
-                $(wrapper).find(sections).each(function() {
+					} else {
+						currLink.removeClass(activeClass);
+					}
 
-                    var listElem = $('<li />').appendTo(navList),
-                        link = $('<a href="javascript:;" />').attr( 'data-scroll-to', $(this).text() ).text( $(this).text() ).appendTo(listElem);
+				});
 
-                    $(this).nextUntil(sections).addBack().wrapAll( '<' + container + ' data-scroll-target="' + $(this).text() + '" />' );
-                })
-            }
+			});
 
-        }
+		},
 
-    };
+		autoBuild: function(el, options) {
 
-    // A really lightweight plugin wrapper around the constructor,
-    // preventing against multiple instantiations
-    $.fn[pluginName] = function ( options ) {
+			if ( this.options.autoBuild ) {
 
-        if ( !$.data( this, "plugin_" + pluginName ) ) {
-            $.data( this, "plugin_" + pluginName, new Plugin( this, options ) );
-        }
+				var sections = this.options.sections, // <h2>
+					container = this.options.sectionEl, // <section>
+					wrapper   = this.options.wrapper, // article[role="article"]
+					navEl     = this.options.navEl, // #nav
+					navList   = $('<ul />').prependTo(navEl);
 
-    };
+				$(wrapper).find(sections).each(function() {
+					var listElem = $('<li />').appendTo(navList),
+						scrollTo = $(this).text().replace(/ /g,"_"),
+						link = $('<a href="javascript:;" />').attr( 'data-scroll-to', scrollTo ).text( scrollTo ).appendTo(listElem);
+					$(this).nextUntil(sections).addBack().wrapAll( '<' + container + ' data-scroll-target="' + scrollTo + '" />' );
+				});
 
-    // Made into selectorless call
-    $[pluginName] = function(options) {
-        var $window = $(window);
-        return $window.simpleAnchors.apply($window, Array.prototype.slice.call(arguments, 0));
-    };
+			}
+
+		}
+	});
+
+	// A really lightweight plugin wrapper around the constructor,
+	// preventing against multiple instantiations
+	$.fn[pluginName] = function ( options ) {
+
+		if ( !$.data( this, "plugin_" + pluginName ) ) {
+			$.data( this, "plugin_" + pluginName, new Plugin( this, options ) );
+		}
+
+
+		// this.each(function() {
+		// 	if ( !$.data( this, "plugin_" + pluginName ) ) {
+		// 		$.data( this, "plugin_" + pluginName, new Plugin( this, options ) );
+		// 	}
+		// });
+
+		// // chain jQuery functions
+		// return this;
+
+
+	};
+
+	// Made into selectorless call
+	$[pluginName] = function(options) {
+		var $window = $(window);
+		return $window.simpleAnchors.apply($window, Array.prototype.slice.call(arguments, 0));
+	};
 
 })( jQuery, window, document );

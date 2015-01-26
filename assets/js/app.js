@@ -26,12 +26,12 @@
 
 	SHORTNAME.setElements = function(){
 
-		SHORTNAME.elems						= {};
+		SHORTNAME.elems                     = {};
 
 		// defaults
-		SHORTNAME.elems.html				=	$('html');
-		SHORTNAME.elems.body				=	$('body');
-		SHORTNAME.elems.scrollToTop			=	$('a[data-scroll-to="top"]');
+		SHORTNAME.elems.html                =   $('html');
+		SHORTNAME.elems.body                =   $('body');
+		SHORTNAME.elems.scrollToTop         =   $('a[data-scroll-to="top"]');
 
 	};
 
@@ -61,10 +61,23 @@
 
 	SHORTNAME.basics = function() {
 
+		var scrollNavOffset = $('#header').offset().top,
+			scrollNavHeight = $('#header').outerHeight();
+
+		$(window).scroll(function(){
+			var scroll = $(window).scrollTop();
+			if ( scroll >= scrollNavOffset ) {
+				$('#header').addClass('sticky-nav');
+
+			} else {
+				$('#header').removeClass('sticky-nav');
+			}
+		});
+
 		// SimpleAnchors
 		$.simpleAnchors({
-			offset: -1, // 80-1, header height on scroll
-			easing: 'easeInOutCubic'
+			offset: scrollNavHeight,
+			easing: 'easeInOutCubic',
 		});
 
 	};
