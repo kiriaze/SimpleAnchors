@@ -26,10 +26,12 @@
             autoBuild: false,
             // upKey           = 38,            // key code to navigate to the next section
             // downKey         = 40,            // key code to navigate to the previous section
-            sections: 'h2',
+            sections: 'h2',                     // the elements auto build targets to generate links from
             // subSections: false,
-            sectionEl: 'section',
-            wrapper: 'article[role="article"]',
+            sectionEl: 'section',               // the elements auto build searchs for the section arg
+            wrapper: '.test',                   // wrapper of all the auto build sections
+            navEl: '#nav',                      // to place auto build links in
+
             // showHeadline: true,
             // showTopLink: true,
             // topLinkText: 'Top',
@@ -50,14 +52,18 @@
         this.$link      = $(this.link);
 
         this.init();
-        this.scrollSpy();
-        this.autoBuild();
 
     }
 
-    Plugin.prototype = {
+    $.extend(Plugin.prototype, {
 
-        init: function() {
+        init: function () {
+            // Place initialization logic here
+            // You already have access to the DOM element and
+            // the options via the instance, e.g. this.element
+            // and this.settings
+            // you can add more functions like the one below and
+            // call them like so: this.yourOtherFunction(this.element, this.settings).
 
             // console.log(this.element.selector);
             // console.log(this.options);
@@ -84,7 +90,7 @@
                 var easing      = $options.easing;
 
                 // if scrollTarget is valid, scroll to
-                if( scrollTarget && scrollTarget.offset() ){
+                if ( scrollTarget && scrollTarget.offset() ) {
                     if(/(iPhone|iPod)\sOS\s6/.test(navigator.userAgent)){
                         $('html, body').animate({
                             scrollTop: scrollTarget.offset().top
@@ -95,8 +101,10 @@
                         }, duration, easing);
                     }
                 }
-
             });
+
+            this.autoBuild();
+            this.scrollSpy();
 
         },
 
@@ -104,50 +112,64 @@
 
             var activeClass = this.options.activeClass,
                 $link       = this.$link,
-                offset      = this.options.offset;
+                offset      = this.options.offset + 1;
 
             // on scroll, check to see if the element has reached the top,
             // and if so add class to nav element
-            $('[data-scroll-target]').each( function() {
+            $(window).scroll(function() {
 
-                var $this = $(this);
+                var scrollPos = $(window).scrollTop();
+                $('[data-scroll-to]').each(function() {
 
-                $(window).scroll(function() {
-                    var elemTop = $this.offset().top - offset - 1; // -1 hack..
-                    var target = $this.attr('data-scroll-target');
-                    var windowTop = $(window).scrollTop();
-                    if ( windowTop >= elemTop ) {
-                        $link.removeClass(activeClass);
-                        if ( target != 'top' ) // exclude back to top anchor
-                            $('[data-scroll-to='+target+']').addClass(activeClass);
+                    var currLink = $(this),
+                        target     = currLink.data('scroll-to'),
+                        refElement = $('[data-scroll-target='+ target +']');
+
+                    if ( !refElement.length ) {
+                        return;
                     }
+
+                    if (
+                        ( refElement.position().top - offset <= scrollPos ) &&
+                        ( refElement.position().top - offset + refElement.outerHeight() > scrollPos )
+                    ) {
+
+                        $('[data-scroll-to]').removeClass(activeClass);
+
+                        if ( target != 'top' ) // exclude back to top anchor
+                            currLink.addClass(activeClass);
+
+                    } else {
+                        currLink.removeClass(activeClass);
+                    }
+
                 });
 
-            })
+            });
 
         },
 
         autoBuild: function(el, options) {
 
-            if( this.options.autoBuild ) {
+            if ( this.options.autoBuild ) {
 
                 var sections = this.options.sections, // <h2>
                     container = this.options.sectionEl, // <section>
-                    wrapper = this.options.wrapper, // article[role="article"]
-                    navList = $('<ul />').prependTo(wrapper);
+                    wrapper   = this.options.wrapper, // article[role="article"]
+                    navEl     = this.options.navEl, // #nav
+                    navList   = $('<ul />').prependTo(navEl);
 
                 $(wrapper).find(sections).each(function() {
-
                     var listElem = $('<li />').appendTo(navList),
-                        link = $('<a href="javascript:;" />').attr( 'data-scroll-to', $(this).text() ).text( $(this).text() ).appendTo(listElem);
+                        scrollTo = $(this).text().replace(/ /g,"_"),
+                        link = $('<a href="javascript:;" />').attr( 'data-scroll-to', scrollTo ).text( scrollTo ).appendTo(listElem);
+                    $(this).nextUntil(sections).addBack().wrapAll( '<' + container + ' data-scroll-target="' + scrollTo + '" />' );
+                });
 
-                    $(this).nextUntil(sections).addBack().wrapAll( '<' + container + ' data-scroll-target="' + $(this).text() + '" />' );
-                })
             }
 
         }
-
-    };
+    });
 
     // A really lightweight plugin wrapper around the constructor,
     // preventing against multiple instantiations
