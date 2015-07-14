@@ -1,0 +1,10 @@
+{
+  "name": "simple-anchors",
+  "version": "1.0.0",
+  "devDependencies": {
+
+  },
+  "spm": {
+    "main": "simpleAnchors.js"
+  }
+}

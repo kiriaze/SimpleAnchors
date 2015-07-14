@@ -1,0 +1,12 @@
+{
+  "name": "simple-anchors",
+  "version": "1.0.0",
+  "main": "simpleAnchors.js",
+  "ignore": [
+        ".bowerrc",
+        ".gitignore",
+        "bower.json",
+        "package.json",
+        "README.md"
+    ]
+}
