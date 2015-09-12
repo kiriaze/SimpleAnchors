@@ -160,9 +160,10 @@
                     navList   = $('<ul />').prependTo(navEl);
 
                 $(wrapper).find(sections).each(function() {
-                    var listElem = $('<li />').appendTo(navList),
-                        scrollTo = $(this).text().replace(/ /g,"_"),
-                        link = $('<a href="javascript:;" />').attr( 'data-scroll-to', scrollTo ).text( scrollTo ).appendTo(listElem);
+                    var listElem     = $('<li />').appendTo(navList),
+                        scrollToName = $(this).text(),
+                        scrollTo     = $(this).text().toLowerCase().replace(/ /g,"_"),
+                        link = $('<a href="javascript:;" />').attr( 'data-scroll-to', scrollTo ).text( scrollToName ).appendTo(listElem);
                     $(this).nextUntil(sections).addBack().wrapAll( '<' + container + ' data-scroll-target="' + scrollTo + '" />' );
                 });
 
