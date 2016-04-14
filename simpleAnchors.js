@@ -114,36 +114,48 @@
                 $link       = this.$link,
                 offset      = this.options.offset + 1;
 
+            var timer;
+
             // on scroll, check to see if the element has reached the top,
             // and if so add class to nav element
             $(window).scroll(function() {
 
-                var scrollPos = $(window).scrollTop();
-                $('[data-scroll-to]').each(function() {
+				if ( timer ) {
+					window.clearTimeout(timer);
+				}
 
-                    var currLink = $(this),
-                        target     = currLink.data('scroll-to'),
-                        refElement = $('[data-scroll-target='+ target +']');
+				timer = window.setTimeout(function() {
+					// actual throttled events
 
-                    if ( !refElement.length ) {
-                        return;
-                    }
+	                var scrollPos = $(window).scrollTop();
+	                $('[data-scroll-to]').each(function() {
 
-                    if (
-                        ( refElement.position().top - offset <= scrollPos ) &&
-                        ( refElement.position().top - offset + refElement.outerHeight() > scrollPos )
-                    ) {
+	                    var currLink = $(this),
+	                        target     = currLink.data('scroll-to'),
+	                        refElement = $('[data-scroll-target='+ target +']');
 
-                        $('[data-scroll-to]').removeClass(activeClass);
+	                    if ( !refElement.length ) {
+	                        return;
+	                    }
 
-                        if ( target != 'top' ) // exclude back to top anchor
-                            currLink.addClass(activeClass);
+	                    if (
+	                        ( refElement.position().top - offset <= scrollPos ) &&
+	                        ( refElement.position().top - offset + refElement.outerHeight() > scrollPos )
+	                    ) {
 
-                    } else {
-                        currLink.removeClass(activeClass);
-                    }
+	                        $('[data-scroll-to]').removeClass(activeClass);
 
-                });
+	                        if ( target != 'top' ) // exclude back to top anchor
+	                            currLink.addClass(activeClass);
+
+	                    } else {
+	                        currLink.removeClass(activeClass);
+	                    }
+
+	                });
+
+				}, 100);
+
 
             });
 
